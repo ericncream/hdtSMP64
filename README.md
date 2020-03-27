@@ -1,6 +1,6 @@
-# hdtSMP for Skyrim Special Edition
+# hdtSMP for Fallout4 (I hope)
 
-Fork of [original code](https://github.com/HydrogensaysHDT/hdt-skyrimse-mods) by hydrogensaysHDT
+A fork of [https://github.com/aers/hdtSMP64](https://github.com/aers/hdtSMP64) which is a fork of [original code](https://github.com/HydrogensaysHDT/hdt-skyrimse-mods) by hydrogensaysHDT
 
 High Heels plugin has been removed, this repository only contains HDT-SMP.
 

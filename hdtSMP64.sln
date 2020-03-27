@@ -9,9 +9,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_vc14", "..\common\co
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skse64", "skse64\skse64.vcxproj", "{7028B79C-06E3-4D9A-B38C-1DC3680B1BDB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hdtSSEPhysics", "hdtSMP64\hdtSMP64.vcxproj", "{B9F47E7B-068A-419A-9AA8-F72CCE662C2B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hdtSMP64", "hdtSMP64\hdtSMP64.vcxproj", "{B9F47E7B-068A-419A-9AA8-F72CCE662C2B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hdtSSEUtils", "hdtSSEUtils\hdtSSEUtils.vcxproj", "{EBB1A6FA-5E3C-49B5-A5B6-A6495B9CD5B0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "f4se", "f4se\f4se.vcxproj", "{A236F69D-8FF9-4491-AC5F-45BF49448BBE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "f4se_common", "f4se_common\f4se_common.vcxproj", "{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +72,26 @@ Global
 		{EBB1A6FA-5E3C-49B5-A5B6-A6495B9CD5B0}.Release|x64.ActiveCfg = Release|x64
 		{EBB1A6FA-5E3C-49B5-A5B6-A6495B9CD5B0}.Release|x64.Build.0 = Release|x64
 		{EBB1A6FA-5E3C-49B5-A5B6-A6495B9CD5B0}.Release|x86.ActiveCfg = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Debug|x64.ActiveCfg = Debug|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Debug|x64.Build.0 = Debug|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Debug|x86.ActiveCfg = Debug|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release_noAVX|x64.ActiveCfg = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release_noAVX|x64.Build.0 = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release_noAVX|x86.ActiveCfg = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release_noAVX|x86.Build.0 = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release|x64.ActiveCfg = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release|x64.Build.0 = Release|x64
+		{A236F69D-8FF9-4491-AC5F-45BF49448BBE}.Release|x86.ActiveCfg = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Debug|x64.ActiveCfg = Debug|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Debug|x64.Build.0 = Debug|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Debug|x86.ActiveCfg = Debug|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release_noAVX|x64.ActiveCfg = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release_noAVX|x64.Build.0 = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release_noAVX|x86.ActiveCfg = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release_noAVX|x86.Build.0 = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release|x64.ActiveCfg = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release|x64.Build.0 = Release|x64
+		{20C6411C-596F-4B85-BE4E-8BC91F59D8A6}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

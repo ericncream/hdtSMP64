@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "NetImmerseUtils.h"
-#include <skse64/skse64/GameStreams.h>
+#include <f4se/GameStreams.h>
 #include <fstream>
 
 namespace hdt
@@ -23,12 +23,12 @@ namespace hdt
 
 	NiAVObject * findObject(NiAVObject * obj, const BSFixedString & name)
 	{
-		return obj->GetObjectByName((const char**)&name);
+		return obj->GetObjectByName(&name);
 	}
 
 	NiNode * findNode(NiNode * obj, const BSFixedString & name)
 	{
-		auto ret = obj->GetObjectByName((const char**)&name);
+		auto ret = obj->GetObjectByName(&name);
 		return ret ? ret->GetAsNiNode() : nullptr;
 	}
 
@@ -65,10 +65,8 @@ namespace hdt
 	{
 		if (!obj) return;
 
-		NiAVObject::ControllerUpdateContext ctx =
-		{ 0.f,
-			dirty ? NiAVObject::ControllerUpdateContext::kDirty : NiAVObject::ControllerUpdateContext::kNone
-		};
+		// probably has to be rewritten
+		NiAVObject::NiUpdateData ctx = NiAVObject::NiUpdateData();
 		
 		obj->UpdateWorldData(&ctx);
 

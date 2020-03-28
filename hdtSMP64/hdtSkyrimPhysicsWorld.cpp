@@ -1,7 +1,7 @@
 #include "hdtSkyrimPhysicsWorld.h"
 #include <ppl.h>
 #include "Offsets.h"
-#include "skse64/GameMenus.h"
+#include "f4se/GameMenus.h"
 
 namespace hdt
 {
@@ -225,11 +225,11 @@ namespace hdt
 
 	void SkyrimPhysicsWorld::onEvent(const FrameEvent& e)
 	{
-		auto mm = MenuManager::GetSingleton();
+		auto mm = *g_ui;
 
-		if ((e.gamePaused || mm->IsGamePaused()) && !m_suspended)
+		if ((e.gamePaused || mm->numPauseGame) && !m_suspended)
 			suspend();
-		else if (!(e.gamePaused || mm->IsGamePaused()) && m_suspended)
+		else if (!(e.gamePaused || mm->numPauseGame) && m_suspended)
 			resume();
 
 		std::lock_guard<decltype(m_lock)> l(m_lock);
@@ -264,10 +264,10 @@ namespace hdt
 		m_systems.clear();
 	}
 
-	EventResult SkyrimPhysicsWorld::ReceiveEvent(SKSECameraEvent* evn, EventDispatcher<SKSECameraEvent>* dispatcher)
+	EventResult SkyrimPhysicsWorld::ReceiveEvent(F4SECameraEvent* evn, void * dispatcher)
 	{
 		if (evn && evn->oldState && evn->newState)
-			if (evn->oldState->stateId == 0 && evn->newState->stateId == 9)
+			if (evn->oldState->stateID == 0 && evn->newState->stateID == 9)
 			{
 				m_resetPc = 3;
 			}

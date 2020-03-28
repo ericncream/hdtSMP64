@@ -1,6 +1,6 @@
 #pragma once
 
-#include "skse64_common/Relocation.h"
+#include "f4se_common/Relocation.h"
 
 #define DEFINE_MEMBER_FN_LONG_HOOK(className, functionName, retnType, address, ...)		\
 	typedef retnType (className::* _##functionName##_type)(__VA_ARGS__);			\

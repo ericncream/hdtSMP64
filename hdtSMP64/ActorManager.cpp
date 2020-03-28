@@ -1,13 +1,14 @@
-#include "skse64/GameReferences.h"
+#include "f4se/GameReferences.h"
+#include "f4se/GameObjects.h"
 
 #include "ActorManager.h"
 #include "hdtSkyrimPhysicsWorld.h"
 #include "hdtDefaultBBP.h"
-#include "skse64/GameRTTI.h"
-#include "skse64/NiSerialization.h"
+#include "f4se/GameRTTI.h"
+#include "f4se/NiSerialization.h"
 #include <cinttypes>
 #include "Offsets.h"
-#include "skse64/GameStreams.h"
+#include "f4se/GameStreams.h"
 
 namespace hdt
 {
@@ -659,7 +660,7 @@ namespace hdt
 		// Skinning
 		_DMESSAGE("skinning geometry to skeleton");		
 
-		if (!geometry->m_spSkinInstance || !geometry->m_spSkinInstance->m_spSkinData)
+		if (!geometry->skinInstance || !geometry->skinInstance->m_spSkinData)
 		{
 			_ERROR("geometry is missing skin instance - how?");
 			return;
@@ -751,7 +752,7 @@ namespace hdt
 					if (obj->GetAsBSGeometry())
 						origGeom = obj->GetAsBSGeometry();
 					else if (obj->GetAsNiGeometry())
-						origNiGeom = obj->GetAsNiGeometry();
+						origNiGeom = static_cast<NiGeometry *>(obj->GetAsNiGeometry());
 				}
 			}
 		}
@@ -759,7 +760,7 @@ namespace hdt
 		bool hasMerged = false;
 		bool hasRenames = false;
 		
-		for (int boneIdx = 0; boneIdx < geometry->m_spSkinInstance->m_spSkinData->m_uiBones; boneIdx++)
+		for (int boneIdx = 0; boneIdx < geometry->skinInstance->bones.count; boneIdx++)
 		{
 			BSFixedString boneName("");
 			
@@ -774,11 +775,11 @@ namespace hdt
 			{
 				if (origGeom)
 				{
-					boneName = origGeom->m_spSkinInstance->m_ppkBones[boneIdx]->m_name;
+					boneName = origGeom->skinInstance->bones[boneIdx]->m_name;
 				}
 				else if (origNiGeom)
 				{
-					boneName = origNiGeom->m_spSkinInstance->m_ppkBones[boneIdx]->m_name;
+					boneName = origNiGeom->skinInstance->bones[boneIdx]->m_name;
 				}
 			}
 
@@ -824,11 +825,11 @@ namespace hdt
 				continue;
 			}
 
-			geometry->m_spSkinInstance->m_ppkBones[boneIdx] = boneNode;
-			geometry->m_spSkinInstance->m_worldTransforms[boneIdx] = &boneNode->m_worldTransform;
+			geometry->skinInstance->bones[boneIdx] = boneNode;
+			geometry->skinInstance->worldTransforms[boneIdx] = &boneNode->m_worldTransform;
 		}
 
-		geometry->m_spSkinInstance->m_pkRootParent = headNode;
+		geometry->skinInstance->rootNode = headNode;
 
 		if (hasRenames)
 		{

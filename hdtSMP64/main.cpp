@@ -1,9 +1,9 @@
-#include "skse64/GameMenus.h"
-#include "skse64/GameReferences.h"
-#include "skse64/ObScript.h"
-#include "skse64/PluginAPI.h"
-#include "skse64_common/skse_version.h"
-#include "skse64_common/SafeWrite.h"
+#include "f4se/GameMenus.h"
+#include "f4se/GameReferences.h"
+#include "f4se/ObScript.h"
+#include "f4se/PluginAPI.h"
+#include "f4se_common/f4se_version.h"
+#include "f4se_common/SafeWrite.h"
 
 #include "ActorManager.h"
 #include "config.h"
@@ -13,8 +13,8 @@
 #include "HookEvents.h"
 
 #include <shlobj_core.h>
-#include "skse64/GameRTTI.h"
-#include "skse64_common/BranchTrampoline.h"
+#include "f4se/GameRTTI.h"
+#include "f4se_common/BranchTrampoline.h"
 
 namespace hdt
 {
@@ -28,18 +28,18 @@ namespace hdt
 		{
 		}
 
-		EventResult ReceiveEvent(MenuOpenCloseEvent* evn, EventDispatcher<MenuOpenCloseEvent>* dispatcher) override
+		EventResult ReceiveEvent(MenuOpenCloseEvent* evn, void * dispatcher) override
 		{
-			auto mm = MenuManager::GetSingleton();
+			auto mm = *g_ui;
 
-			if (evn && evn->opening && (!strcmp(evn->menuName.data, "Loading Menu") || !strcmp(
-				evn->menuName.data, "RaceSex Menu")))
+			if (evn && evn->isOpen && (!strcmp(evn->menuName.c_str(), "Loading Menu") || !strcmp(
+				evn->menuName.c_str(), "RaceSex Menu")))
 			{
 				_DMESSAGE("loading menu/racesexmenu detected, scheduling physics reset on world un-suspend");
 				SkyrimPhysicsWorld::get()->suspend(true);
 			}
 
-			if (evn && !evn->opening && !strcmp(evn->menuName.data, "RaceSex Menu"))
+			if (evn && !evn->isOpen && !strcmp(evn->menuName.c_str(), "RaceSex Menu"))
 			{
 				_DMESSAGE("racemenu closed, reloading meshes");
 				ActorManager::instance()->reloadMeshes();
@@ -407,24 +407,24 @@ namespace hdt
 }
 
 extern "C" {
-bool SKSEPlugin_Query(const SKSEInterface* skse, PluginInfo* info)
+bool F4SEPlugin_Query(const F4SEInterface* f4se, PluginInfo* info)
 {
 	// populate info structure
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "hdtSSEPhysics";
 	info->version = 1;
 
-	hdt::gLog.OpenRelative(CSIDL_MYDOCUMENTS, "\\My Games\\Skyrim Special Edition\\SKSE\\hdtSMP64.log");
+	hdt::gLog.OpenRelative(CSIDL_MYDOCUMENTS, "\\My Games\\Fallout4\\F4SE\\hdtSMP64.log");
 	hdt::gLog.SetLogLevel(IDebugLog::LogLevel::kLevel_Message);
 
 	_MESSAGE("hdtSMP64 2.0");
 
-	if (skse->isEditor)
+	if (f4se->isEditor)
 	{
 		return false;
 	}
 
-	if (skse->runtimeVersion != CURRENT_RELEASE_RUNTIME)
+	if (f4se->runtimeVersion != CURRENT_RELEASE_RUNTIME)
 	{
 		_FATALERROR("attempted to load plugin into unsupported game version, exiting");
 		return false;
@@ -445,7 +445,7 @@ bool SKSEPlugin_Query(const SKSEInterface* skse, PluginInfo* info)
 	return true;
 }
 
-bool SKSEPlugin_Load(const SKSEInterface* skse)
+bool F4SEPlugin_Load(const F4SEInterface* f4se)
 {
 	hdt::g_frameEventDispatcher.addListener(hdt::ActorManager::instance());
 	hdt::g_frameEventDispatcher.addListener(hdt::SkyrimPhysicsWorld::get());
@@ -457,20 +457,20 @@ bool SKSEPlugin_Load(const SKSEInterface* skse)
 
 	hdt::hookAll();
 
-	const auto messageInterface = reinterpret_cast<SKSEMessagingInterface*>(skse->QueryInterface(kInterface_Messaging));
+	const auto messageInterface = reinterpret_cast<F4SEMessagingInterface*>(f4se->QueryInterface(kInterface_Messaging));
 	if (messageInterface)
 	{
-		const auto cameraDispatcher = static_cast<EventDispatcher<SKSECameraEvent>*>(messageInterface->
-			GetEventDispatcher(SKSEMessagingInterface::kDispatcher_CameraEvent));
+		const auto cameraDispatcher = static_cast<BSTEventDispatcher<F4SECameraEvent>*>(messageInterface->
+			GetEventDispatcher(F4SEMessagingInterface::kDispatcher_CameraEvent));
 
 		if (cameraDispatcher)
 			cameraDispatcher->AddEventSink(hdt::SkyrimPhysicsWorld::get());
 
-		messageInterface->RegisterListener(skse->GetPluginHandle(), "SKSE", [](SKSEMessagingInterface::Message* msg)
+		messageInterface->RegisterListener(skse->GetPluginHandle(), "F4SE", [](SKSEMessagingInterface::Message* msg)
 		{
-			if (msg && msg->type == SKSEMessagingInterface::kMessage_InputLoaded)
+			if (msg && msg->type == F4SEMessagingInterface::kMessage_InputLoaded)
 			{
-				MenuManager* mm = MenuManager::GetSingleton();
+				UI* mm = g_ui;
 				if (mm)
 					mm->MenuOpenCloseEventDispatcher()->AddEventSink(&hdt::g_freezeEventHandler);
 				hdt::checkOldPlugins();

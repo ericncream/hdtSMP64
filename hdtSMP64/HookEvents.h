@@ -1,9 +1,9 @@
 #pragma once
 
-#include "skse64/NiObjects.h"
+#include "f4se/NiObjects.h"
 
 #include "EventDispatcherImpl.h"
-#include "skse64/NiNodes.h"
+#include "f4se/NiNodes.h"
 
 namespace hdt
 {

@@ -4,7 +4,7 @@
 
 namespace hdt
 {
-	btQuaternion convertNi(const NiMatrix33& rhs);
+	btQuaternion convertNi(const NiMatrix43& rhs);
 
 	inline btVector3 convertNi(const NiPoint3& rhs)
 	{
@@ -21,8 +21,8 @@ namespace hdt
 	}
 
 	NiPoint3 convertBt(const btVector3& rhs);
-	NiMatrix33 convertBt(const btMatrix3x3& rhs);
-	NiMatrix33 convertBt(const btQuaternion& rhs);
+	NiMatrix43 convertBt(const btMatrix3x3& rhs);
+	NiMatrix43 convertBt(const btQuaternion& rhs);
 	NiTransform convertBt(const btQsTransform& rhs);
 
 	static const float scaleRealWorld = 0.01425;

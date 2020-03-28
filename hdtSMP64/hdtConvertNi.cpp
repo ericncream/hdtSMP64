@@ -2,7 +2,7 @@
 
 namespace hdt
 {
-	btQuaternion convertNi(const NiMatrix33& rhs)
+	btQuaternion convertNi(const NiMatrix43& rhs)
 	{
 		//using namespace DirectX;
 		//auto mat = XMLoadFloat3x3((const XMFLOAT3X3*)&rhs);
@@ -36,7 +36,7 @@ namespace hdt
 		return ret;
 	}
 
-	NiMatrix33 convertBt(const btQuaternion& rhs)
+	NiMatrix43 convertBt(const btQuaternion& rhs)
 	{
 		btMatrix3x3 mat(rhs.normalized());
 		return convertBt(mat);
@@ -51,9 +51,9 @@ namespace hdt
 		return ret;
 	}
 
-	NiMatrix33 convertBt(const btMatrix3x3& rhs)
+	NiMatrix43 convertBt(const btMatrix3x3& rhs)
 	{
-		NiMatrix33 ret;
+		NiMatrix43 ret;
 		ret.data[0][0] = rhs[0][0];
 		ret.data[0][1] = rhs[0][1];
 		ret.data[0][2] = rhs[0][2];

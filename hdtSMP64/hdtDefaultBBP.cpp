@@ -1,5 +1,6 @@
 #include "hdtDefaultBBP.h"
-
+#include "f4se/GameRTTI.h"
+#include "f4se/NiRTTI.h"
 #include "XmlReader.h"
 
 
@@ -15,7 +16,7 @@ namespace hdt
 
 	static void loadDefaultBBPs()
 	{
-		auto path = "SKSE/Plugins/hdtSkinnedMeshConfigs/defaultBBPs.xml";
+		auto path = "F4SE/Plugins/hdtSkinnedMeshConfigs/defaultBBPs.xml";
 
 		auto loaded = readAllFile(path);
 		if (loaded.empty()) return;
@@ -92,11 +93,14 @@ namespace hdt
 
 	std::string scanBBP(NiNode* scan)
 	{
-		for (int i = 0; i < scan->m_extraDataLen; ++i)
+		for (int i = 0; i < scan->m_extraData->count; ++i)
 		{
-			auto stringData = ni_cast(scan->m_extraData[i], NiStringExtraData);
-			if (stringData && !strcmp(stringData->m_pcName, "HDT Skinned Mesh Physics Object") && stringData->m_pString)
-				return stringData->m_pString;
+			NiExtraData extraData;
+			auto extraDataPtr = &extraData;
+			scan->m_extraData->GetNthItem(i, extraDataPtr);
+			auto stringData = DYNAMIC_CAST(extraDataPtr, NiExtraData, NiStringExtraData);
+			if (stringData && !strcmp(stringData->m_string.c_str(), "HDT Skinned Mesh Physics Object") && stringData->m_string.c_str())
+				return std::string(stringData->m_string.c_str());
 		}
 
 		return scanDefaultBBP(scan);

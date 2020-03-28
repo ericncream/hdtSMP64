@@ -1,15 +1,14 @@
-#include "skse64/GameReferences.h"
-#include "skse64/NiObjects.h"
-#include "skse64/NiNodes.h"
+#include "f4se/GameReferences.h"
+#include "f4se/NiObjects.h"
+#include "f4se/NiNodes.h"
 
 #include "EventDebugLogger.h"
 
 namespace hdt
 {
-	EventResult EventDebugLogger::ReceiveEvent(TESCellAttachDetachEvent* evn,
-	                                           EventDispatcher<TESCellAttachDetachEvent>* dispatcher)
+	EventResult EventDebugLogger::ReceiveEvent(TESCellAttachDetachEvent* evn, void * dispatcher)
 	{
-		if (evn && evn->reference && evn->reference->formType == Character::kTypeID)
+		if (evn && evn->reference && evn->reference->formType == Actor::kTypeID)
 		{
 			_DMESSAGE("received TESCellAttachDetachEvent(formID %08llX, name %s, attached=%s)", evn->reference->formID,
 			          evn->reference->baseForm->GetFullName(), evn->attached ? "true" : "false");
@@ -17,10 +16,9 @@ namespace hdt
 		return kEvent_Continue;
 	}
 
-	EventResult EventDebugLogger::ReceiveEvent(TESMoveAttachDetachEvent* evn,
-	                                           EventDispatcher<TESMoveAttachDetachEvent>* dispatcher)
+	EventResult EventDebugLogger::ReceiveEvent(TESMoveAttachDetachEvent* evn, void * dispatcher)
 	{
-		if (evn && evn->reference && evn->reference->formType == Character::kTypeID)
+		if (evn && evn->reference && evn->reference->formType == Actor::kTypeID)
 		{
 			_DMESSAGE("received TESMoveAttachDetachEvent(formID %08llX, name %s, attached=%s)", evn->reference->formID,
 			          evn->reference->baseForm->GetFullName(), evn->attached ? "true" : "false");

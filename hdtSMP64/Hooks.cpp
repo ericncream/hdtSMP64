@@ -1,19 +1,19 @@
 #include <detours.h>
 
-#include "skse64/GameForms.h"
-#include "skse64/GameReferences.h"
-#include "skse64/NiObjects.h"
-#include "skse64/NiGeometry.h"
-#include "skse64/NiExtraData.h"
+#include "f4se/GameForms.h"
+#include "f4se/GameReferences.h"
+#include "f4se/NiObjects.h"
+#include "f4se/BSGeometry.h"
+#include "f4se/NiExtraData.h"
 
 #include "Hooks.h"
 #include "HookEvents.h"
 #include "Offsets.h"
-#include "skse64/NiNodes.h"
-#include "skse64/GameRTTI.h"
-#include "skse64_common/SafeWrite.h"
+#include "f4se/NiNodes.h"
+#include "f4se/GameRTTI.h"
+#include "f4se_common/SafeWrite.h"
 #include <xbyak/xbyak.h>
-#include "skse64_common/BranchTrampoline.h"
+#include "f4se_common/BranchTrampoline.h"
 #include "ActorManager.h"
 
 namespace hdt

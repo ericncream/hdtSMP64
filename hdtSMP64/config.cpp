@@ -113,7 +113,7 @@ namespace hdt
 
 	void loadConfig()
 	{
-		auto bytes = readAllFile2("data/skse/plugins/hdtSkinnedMeshConfigs/configs.xml");
+		auto bytes = readAllFile2("data/f4se/plugins/hdtSkinnedMeshConfigs/configs.xml");
 		if (bytes.empty()) return;
 
 		// Store original locale

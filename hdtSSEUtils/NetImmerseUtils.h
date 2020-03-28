@@ -1,9 +1,9 @@
 #pragma once
 
 #include <common\IPrefix.h>
-#include <skse64\skse64\NiNodes.h>
-#include <skse64\skse64\NiExtraData.h>
-#include <skse64\skse64\NiGeometry.h>
+#include <f4se\NiNodes.h>
+#include <f4se\NiExtraData.h>
+#include <f4se\BsGeometry.h>
 #include "Ref.h"
 
 // note: both of these offsets are 0xDEADBEEF guards and were completely wrong prior to this, but things worked anyway I guess
@@ -39,10 +39,9 @@ public:
 
 namespace hdt
 {
-	inline void setBSFixedString(const char** ref, const char* value)
+	inline void setBSFixedString(BSFixedString* ref, const char* value)
 	{
-		auto tmp = reinterpret_cast<BSFixedString*>(ref);
-		CALL_MEMBER_FN(tmp, Set)(value);
+		CALL_MEMBER_FN(ref, Set)(value);
 	}
 
 	inline void setNiNodeName(NiNode* node, const char* name)

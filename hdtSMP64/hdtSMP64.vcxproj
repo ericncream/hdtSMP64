@@ -60,8 +60,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(SolutionDir)..;F:\skyrim-dev\bullet\src;$(SolutionDir)detours\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\skyrim-dev\bullet\build\lib\Debug;F:\skyrim-dev\detours\lib.X64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)..;F:\fallout\HDT\bullet3-master\src;$(SolutionDir)detours\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\fallout\HDT\bullet3-master\build_cmake\lib\Release;F:\fallout\HDT\Detours-master\lib.X64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -216,11 +216,11 @@
     <ClCompile Include="XmlReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\f4se\f4se.vcxproj">
+      <Project>{a236f69d-8ff9-4491-ac5f-45bf49448bbe}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\hdtSSEUtils\hdtSSEUtils.vcxproj">
       <Project>{ebb1a6fa-5e3c-49b5-a5b6-a6495b9cd5b0}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\skse64\skse64.vcxproj">
-      <Project>{7028b79c-06e3-4d9a-b38c-1dc3680b1bdb}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,8 +2,8 @@
 #include "hdtSkinnedMesh/hdtSkinnedMeshShape.h"
 #include "../hdtSSEUtils/NetImmerseUtils.h"
 #include "../hdtSSEUtils/FrameworkUtils.h"
-#include <skse64/skse64/GameStreams.h>
-#include "skse64/GameReferences.h"
+#include <f4se/GameStreams.h>
+#include "f4se/GameReferences.h"
 #include "XmlReader.h"
 
 #include <d3d11.h>

@@ -67,8 +67,5 @@ You will need to add a forward declaration or include for TESObjectREFR in NiObj
 
 hydrogensaysHDT - Creating this plugin
 
-aers - that's me :)
-
-ousnius - some fixes, and "consulting"
-
-
+aers - Maintaining HDT-SMP
+ousnius - some fixes, and "consulting" for aers

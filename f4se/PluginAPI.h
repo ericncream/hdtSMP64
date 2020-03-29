@@ -113,6 +113,15 @@ struct F4SEMessagingInterface
 	bool	(* RegisterListener)(PluginHandle listener, const char* sender, EventCallback handler);
 	bool	(* Dispatch)(PluginHandle sender, UInt32 messageType, void * data, UInt32 dataLen, const char* receiver);
 
+	enum
+	{
+		kDispatcher_ModEvent = 0,
+		kDispatcher_CameraEvent,
+		kDispatcher_CrosshairEvent,
+		kDispatcher_ActionEvent,
+		kDispatcher_NiNodeUpdateEvent
+	};
+
 	// Use this to acquire F4SE's internal EventDispatchers so that you can sink to them
 	// Currently none implemented yet
 	void	* (* GetEventDispatcher)(UInt32 dispatcherId);

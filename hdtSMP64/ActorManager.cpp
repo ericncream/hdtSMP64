@@ -346,8 +346,8 @@ namespace hdt
 	NiNode* ActorManager::Skeleton::cloneNodeTree(NiNode* src, IString* prefix, std::unordered_map<IDStr, IDStr>& map)
 	{
 		NiCloningProcess c;
-		auto ret = static_cast<NiNode*>(src->CreateClone(c));
-		src->ProcessClone(&c);
+		auto ret = static_cast<NiNode*>(src->CreateClone(&c));
+		src->Unk_20(&c);
 
 		renameTree(src, prefix, map);
 		renameTree(ret, prefix, map);
@@ -361,7 +361,7 @@ namespace hdt
 		{
 			std::string newName(prefix->cstr(), prefix->size());
 			newName += root->m_name;
-			if (map.insert(std::make_pair<IDStr, IDStr>(root->m_name, newName)).second)
+			if (map.insert(std::make_pair<IDStr, IDStr>(IDStr(root->m_name), newName)).second)
 				_DMESSAGE("Rename Bone %s -> %s", root->m_name, newName.c_str());
 			setNiNodeName(root, newName.c_str());
 		}
@@ -383,7 +383,7 @@ namespace hdt
 
 			if (child->m_name && !strncmp(child->m_name, prefix->cstr(), prefix->size()))
 			{
-				dst->RemoveAt(i++);
+				dst->RemoveChildAt(i++);
 			}
 			else
 			{
@@ -524,8 +524,8 @@ namespace hdt
 	                                                  std::unordered_map<IDStr, IDStr>& map)
 	{
 		NiCloningProcess c;
-		auto ret = static_cast<NiNode*>(src->CreateClone(c));
-		src->ProcessClone(&c);
+		auto ret = static_cast<NiNode*>(src->CreateClone(&c));
+		src->Unk_20(&c);
 
 		renameHeadTree(ret, prefix, map);
 
@@ -538,7 +538,7 @@ namespace hdt
 		{
 			std::string newName(prefix->cstr(), prefix->size());
 			newName += root->m_name;
-			if (map.insert(std::make_pair<IDStr, IDStr>(root->m_name, newName)).second)
+			if (map.insert(std::make_pair<IDStr, IDStr>(IDStr(root->m_name), newName)).second)
 			{
 				_DMESSAGE("Rename Bone %s -> %s", root->m_name, newName.c_str());
 			}
@@ -660,102 +660,102 @@ namespace hdt
 		// Skinning
 		_DMESSAGE("skinning geometry to skeleton");		
 
-		if (!geometry->skinInstance || !geometry->skinInstance->m_spSkinData)
+		if (!geometry->skinInstance || !geometry->skinInstance->boneData)
 		{
 			_ERROR("geometry is missing skin instance - how?");
 			return;
 		}
 
-		auto fmd = static_cast<BSFaceGenModelExtraData*>(geometry->GetExtraData("FMD"));
+		//auto fmd = static_cast<BSFaceGenModelExtraData*>(geometry->GetExtraData("FMD"));
 
 		BSGeometry* origGeom = nullptr;
 		NiGeometry* origNiGeom = nullptr;
-		
-		if (fmd && fmd->m_model && fmd->m_model->unk10 && fmd->m_model->unk10->unk08)
-		{
-			_DMESSAGE("orig part node found via fmd");
-			auto origRootNode = fmd->m_model->unk10->unk08->GetAsNiNode();
-			head.headParts.back().physicsFile = scanBBP(origRootNode);
-			head.headParts.back().origPartRootNode = origRootNode;
-			for (int i = 0; i < origRootNode->m_children.m_size; i++)
-			{
-				if (origRootNode->m_children.m_data[i])
-				{
-					const auto geo = origRootNode->m_children.m_data[i]->GetAsBSGeometry();
+		//
+		//if (fmd && fmd->m_model && fmd->m_model->unk10 && fmd->m_model->unk10->unk08)
+		//{
+		//	_DMESSAGE("orig part node found via fmd");
+		//	auto origRootNode = fmd->m_model->unk10->unk08->GetAsNiNode();
+		//	head.headParts.back().physicsFile = scanBBP(origRootNode);
+		//	head.headParts.back().origPartRootNode = origRootNode;
+		//	for (int i = 0; i < origRootNode->m_children.m_size; i++)
+		//	{
+		//		if (origRootNode->m_children.m_data[i])
+		//		{
+		//			const auto geo = origRootNode->m_children.m_data[i]->GetAsBSGeometry();
 
-					if (geo)
-					{
-						origGeom = geo;
-						break;
-					}
-				}
-			}			
-		}
-		else 
-		{
-			_DMESSAGE("no fmd available, loading original facegeom");
-			if (!head.npcFaceGeomNode)
-			{
-				if (skeleton->m_owner && skeleton->m_owner->baseForm)
-				{
-					auto npc = DYNAMIC_CAST(skeleton->m_owner->baseForm, TESForm, TESNPC);
-					if (npc)
-					{
-						char filePath[MAX_PATH];
-						if (TESNPC_GetFaceGeomPath(npc, filePath))
-						{
-							_DMESSAGE("loading facegeom from path %s", filePath);
-							static const int MAX_SIZE = sizeof(NiStream) + 0x200;
-							UInt8 niStreamMemory[MAX_SIZE];
-							memset(niStreamMemory, 0, MAX_SIZE);
-							NiStream* niStream = (NiStream*)niStreamMemory;
-							CALL_MEMBER_FN(niStream, ctor)();
+		//			if (geo)
+		//			{
+		//				origGeom = geo;
+		//				break;
+		//			}
+		//		}
+		//	}			
+		//}
+		//else 
+		//{
+		//	_DMESSAGE("no fmd available, loading original facegeom");
+		//	if (!head.npcFaceGeomNode)
+		//	{
+		//		if (skeleton->m_owner && skeleton->m_owner->baseForm)
+		//		{
+		//			auto npc = DYNAMIC_CAST(skeleton->m_owner->baseForm, TESForm, TESNPC);
+		//			if (npc)
+		//			{
+		//				char filePath[MAX_PATH];
+		//				if (TESNPC_GetFaceGeomPath(npc, filePath))
+		//				{
+		//					_DMESSAGE("loading facegeom from path %s", filePath);
+		//					static const int MAX_SIZE = sizeof(NiStream) + 0x200;
+		//					UInt8 niStreamMemory[MAX_SIZE];
+		//					memset(niStreamMemory, 0, MAX_SIZE);
+		//					NiStream* niStream = (NiStream*)niStreamMemory;
+		//					CALL_MEMBER_FN(niStream, ctor)();
 
-							BSResourceNiBinaryStream binaryStream(filePath);
-							if (!binaryStream.IsValid())
-							{
-								_ERROR("somehow npc facegeom was not found");
-								CALL_MEMBER_FN(niStream, dtor)();
-							}
-							else
-							{
-								niStream->LoadStream(&binaryStream);
-								if (niStream->m_rootObjects.m_data[0])
-								{
-									auto rootFadeNode = niStream->m_rootObjects.m_data[0]->GetAsBSFadeNode();
-									if (rootFadeNode)
-									{
-										_DMESSAGE("npc root fadenode found");
-										head.npcFaceGeomNode = rootFadeNode;							
-									}
-									else
-									{
-										_DMESSAGE("npc facegeom root wasn't fadenode as expected");
-									}
-								}
-								CALL_MEMBER_FN(niStream, dtor)();
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				_DMESSAGE("using cached facegeom");
-			}
-			if (head.npcFaceGeomNode)
-			{
-				head.headParts.back().physicsFile = scanBBP(head.npcFaceGeomNode);
-				auto obj = findObject(head.npcFaceGeomNode, geometry->m_name);
-				if (obj)
-				{
-					if (obj->GetAsBSGeometry())
-						origGeom = obj->GetAsBSGeometry();
-					else if (obj->GetAsNiGeometry())
-						origNiGeom = static_cast<NiGeometry *>(obj->GetAsNiGeometry());
-				}
-			}
-		}
+		//					BSResourceNiBinaryStream binaryStream(filePath);
+		//					if (!binaryStream.IsValid())
+		//					{
+		//						_ERROR("somehow npc facegeom was not found");
+		//						CALL_MEMBER_FN(niStream, dtor)();
+		//					}
+		//					else
+		//					{
+		//						niStream->LoadStream(&binaryStream);
+		//						if (niStream->m_rootObjects.m_data[0])
+		//						{
+		//							auto rootFadeNode = niStream->m_rootObjects.m_data[0]->GetAsBSFadeNode();
+		//							if (rootFadeNode)
+		//							{
+		//								_DMESSAGE("npc root fadenode found");
+		//								head.npcFaceGeomNode = rootFadeNode;							
+		//							}
+		//							else
+		//							{
+		//								_DMESSAGE("npc facegeom root wasn't fadenode as expected");
+		//							}
+		//						}
+		//						CALL_MEMBER_FN(niStream, dtor)();
+		//					}
+		//				}
+		//			}
+		//		}
+		//	}
+		//	else
+		//	{
+		//		_DMESSAGE("using cached facegeom");
+		//	}
+		//	if (head.npcFaceGeomNode)
+		//	{
+		//		head.headParts.back().physicsFile = scanBBP(head.npcFaceGeomNode);
+		//		auto obj = findObject(head.npcFaceGeomNode, geometry->m_name);
+		//		if (obj)
+		//		{
+		//			if (obj->GetAsBSGeometry())
+		//				origGeom = obj->GetAsBSGeometry();
+		//			else if (obj->GetAsNiGeometry())
+		//				origNiGeom = static_cast<NiGeometry *>(obj->GetAsNiGeometry());
+		//		}
+		//	}
+		//}
 
 		bool hasMerged = false;
 		bool hasRenames = false;
@@ -764,12 +764,12 @@ namespace hdt
 		{
 			BSFixedString boneName("");
 			
-			// skin the way the game does via FMD
-			if (boneIdx <= 7)
-			{
-				if (fmd)
-					boneName = fmd->bones[boneIdx];
-			}
+			//// skin the way the game does via FMD
+			//if (boneIdx <= 7)
+			//{
+			//	if (fmd)
+			//		boneName = fmd->bones[boneIdx];
+			//}
 
 			if (!*boneName.c_str())
 			{
@@ -777,10 +777,10 @@ namespace hdt
 				{
 					boneName = origGeom->skinInstance->bones[boneIdx]->m_name;
 				}
-				else if (origNiGeom)
-				{
-					boneName = origNiGeom->skinInstance->bones[boneIdx]->m_name;
-				}
+				//else if (origNiGeom)
+				//{
+				//	boneName = origNiGeom->skinInstance->bones[boneIdx]->m_name;
+				//}
 			}
 
 			auto renameIt = this->head.renameMap.find(boneName.c_str());

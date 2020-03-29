@@ -3,6 +3,7 @@
 #include "GameAPI.h"
 #include "f4se_common/Utilities.h"
 #include "f4se_common/f4se_version.h"
+#include "f4se/PapyrusEvents.h"
 
 PluginManager	g_pluginManager;
 
@@ -423,6 +424,28 @@ const char * PluginManager::CheckPluginCompatibility(LoadedPlugin * plugin)
 	}
 
 	return NULL;
+}
+
+void* PluginManager::GetEventDispatcher(UInt32 dispatcherId)
+{
+	void* result = NULL;
+
+#ifdef RUNTIME
+	switch (dispatcherId)
+	{
+	case F4SEMessagingInterface::kDispatcher_CameraEvent:
+		result = (void*)&g_cameraEventSink;
+		break;
+
+	default:
+		_WARNING("unknown EventDispatcher %08X", dispatcherId);
+		break;
+	}
+#else
+	_WARNING("unknown EventDispatcher %08X", id);
+#endif
+
+	return result;
 }
 
 // Plugin communication interface

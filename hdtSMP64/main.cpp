@@ -1,5 +1,6 @@
 #include "f4se/GameMenus.h"
 #include "f4se/GameReferences.h"
+#include "f4se/NiMaterials.h"
 #include "f4se/ObScript.h"
 #include "f4se/PluginAPI.h"
 #include "f4se_common/f4se_version.h"
@@ -15,6 +16,7 @@
 #include <shlobj_core.h>
 #include "f4se/GameRTTI.h"
 #include "f4se_common/BranchTrampoline.h"
+#include "../../common/ITypes.h"
 
 namespace hdt
 {
@@ -70,92 +72,92 @@ namespace hdt
 		}
 	}
 
-	NiTexturePtr* GetTextureFromIndex(BSLightingShaderMaterial* material, UInt32 index)
+	NiPointer<NiTexture>* GetTextureFromIndex(BSLightingShaderMaterialBase* material, UInt32 index)
 	{
 		switch (index)
 		{
 		case 0:
-			return &material->texture1;
+			return &material->spDiffuseTexture;
 			break;
 		case 1:
-			return &material->texture2;
+			return &material->spNormalTexture;
 			break;
 		case 2:
 			{
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_FaceGen)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Face)
 				{
-					return &static_cast<BSLightingShaderMaterialFacegen*>(material)->unkB0;
+					return &static_cast<BSLightingShaderMaterialFace*>(material)->baseDiffuse;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_GlowMap)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Glowmap)
 				{
-					return &static_cast<BSLightingShaderMaterialFacegen*>(material)->unkB0;
+					return &static_cast<BSLightingShaderMaterialFace*>(material)->baseDiffuse;
 				}
-				return &material->texture3;
+				return &material->spRimSoftLightingTexture;
 			}
 			break;
 		case 3:
 			{
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_FaceGen)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Face)
 				{
-					return &static_cast<BSLightingShaderMaterialFacegen*>(material)->unkA8;
+					return &static_cast<BSLightingShaderMaterialFace*>(material)->baseDiffuse;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_Parallax)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Parallax)
 				{
-					return &static_cast<BSLightingShaderMaterialParallax*>(material)->unkA0;
+					return &static_cast<BSLightingShaderMaterialParallax*>(material)->spHeightTexture;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_Parallax || material->GetShaderType() ==
-					BSShaderMaterial::kShaderType_ParallaxOcc)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Parallax || material->GetType() ==
+					BSLightingShaderMaterialBase::kType_ParallaxOcc)
 				{
-					return &static_cast<BSLightingShaderMaterialParallaxOcc*>(material)->unkA0;
+					return &static_cast<BSLightingShaderMaterialParallaxOcc*>(material)->spHeightTexture;
 				}
 			}
 			break;
 		case 4:
 			{
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_Eye)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Eye)
 				{
-					return &static_cast<BSLightingShaderMaterialEye*>(material)->unkA0;
+					return &static_cast<BSLightingShaderMaterialEye*>(material)->spEnvTexture;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_EnvironmentMap)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Envmap)
 				{
-					return &static_cast<BSLightingShaderMaterialEnvmap*>(material)->unkA0;
+					return &static_cast<BSLightingShaderMaterialEnvmap*>(material)->spEnvTexture;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_MultilayerParallax)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_MultiLayerParallax)
 				{
-					return &static_cast<BSLightingShaderMaterialMultiLayerParallax*>(material)->unkA8;
+					return &static_cast<BSLightingShaderMaterialMultiLayerParallax*>(material)->spEnvMaskTexture;
 				}
 			}
 			break;
 		case 5:
 			{
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_Eye)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Eye)
 				{
-					return &static_cast<BSLightingShaderMaterialEye*>(material)->unkA8;
+					return &static_cast<BSLightingShaderMaterialEye*>(material)->spEnvMaskTexture;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_EnvironmentMap)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Envmap)
 				{
-					return &static_cast<BSLightingShaderMaterialEnvmap*>(material)->unkA0;
+					return &static_cast<BSLightingShaderMaterialEnvmap*>(material)->spEnvMaskTexture;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_MultilayerParallax)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_MultiLayerParallax)
 				{
-					return &static_cast<BSLightingShaderMaterialMultiLayerParallax*>(material)->unkB0;
+					return &static_cast<BSLightingShaderMaterialMultiLayerParallax*>(material)->spEnvMaskTexture;
 				}
 			}
 			break;
 		case 6:
 			{
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_FaceGen)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_Face)
 				{
-					return &static_cast<BSLightingShaderMaterialFacegen*>(material)->renderedTexture;
+					return &static_cast<BSLightingShaderMaterialFace*>(material)->baseDiffuse;
 				}
-				if (material->GetShaderType() == BSShaderMaterial::kShaderType_MultilayerParallax)
+				if (material->GetType() == BSLightingShaderMaterialBase::kType_MultiLayerParallax)
 				{
-					return &static_cast<BSLightingShaderMaterialMultiLayerParallax*>(material)->unkA0;
+					return &static_cast<BSLightingShaderMaterialMultiLayerParallax*>(material)->spLayerTexture;
 				}
 			}
 			break;
 		case 7:
-			return &material->texture4;
+			return &material->spSmoothnessSpecMaskTexture;
 			break;
 		}
 
@@ -165,12 +167,14 @@ namespace hdt
 	void DumpNodeChildren(NiAVObject* node)
 	{
 		_MESSAGE("{%s} {%s} {%X} [%f, %f, %f]", node->GetRTTI()->name, node->m_name, node, node->m_worldTransform.pos.x, node->m_worldTransform.pos.y, node->m_worldTransform.pos.z);
-		if (node->m_extraDataLen > 0)
+		if (node->m_extraData->count > 0)
 		{
 			gLog.Indent();
-			for (UInt16 i = 0; i < node->m_extraDataLen; i++)
+			for (UInt16 i = 0; i < node->m_extraData->count; i++)
 			{
-				_MESSAGE("{%s} {%s} {%X}", node->m_extraData[i]->GetRTTI()->name, node->m_extraData[i]->m_pcName, node);
+				NiExtraData* extraDataPtr; 
+				node->m_extraData->GetNthItem(i, extraDataPtr);
+				_MESSAGE("{%s} {%s} {%X}", extraDataPtr->GetRTTI()->name, extraDataPtr->m_name, node);
 			}
 			gLog.Outdent();
 		}
@@ -189,18 +193,18 @@ namespace hdt
 					if (geometry)
 					{
 						_MESSAGE("{%s} {%s} {%X} [%f, %f, %f] - Geometry", object->GetRTTI()->name, object->m_name, object, geometry->m_worldTransform.pos.x, geometry->m_worldTransform.pos.y, geometry->m_worldTransform.pos.z);
-						if (geometry->m_spSkinInstance && geometry->m_spSkinInstance->m_spSkinData)
+						if (geometry->skinInstance)
 						{
 							gLog.Indent();
-							for (int i = 0; i < geometry->m_spSkinInstance->m_spSkinData->m_uiBones; i++)
+							for (int i = 0; i < geometry->skinInstance->bones.count; i++)
 							{
-								auto bone = geometry->m_spSkinInstance->m_ppkBones[i];
+								auto bone = geometry->skinInstance->bones[i];
 								_MESSAGE("Bone %d - {%s} {%s} {%X} [%f, %f, %f]", i, bone->GetRTTI()->name, bone->m_name, bone, bone->m_worldTransform.pos.x, bone->m_worldTransform.pos.y, bone->m_worldTransform.pos.z);
 							}
 							gLog.Outdent();
 						}
 						NiPointer<BSShaderProperty> shaderProperty = niptr_cast<BSShaderProperty>(
-							geometry->m_spEffectState);
+							geometry->effectState);
 						if (shaderProperty)
 						{
 							BSLightingShaderProperty* lightingShader =
@@ -208,27 +212,27 @@ namespace hdt
 							if (lightingShader)
 							{
 								BSLightingShaderMaterial* material = static_cast<BSLightingShaderMaterial*>(
-									lightingShader->material);
+									lightingShader->shaderMaterial);
 
 								gLog.Indent();
-								for (int i = 0; i < BSTextureSet::kNumTextures; ++i)
+								for (int i = 0; i < 10; ++i) // 10 is size of texture set
 								{
-									const char* texturePath = material->textureSet->GetTexturePath(i);
+									const char* texturePath = material->spTextureSet->GetTextureFilenameFS(i);
 									if (!texturePath)
 									{
 										continue;
 									}
 
 									const char* textureName = "";
-									NiTexturePtr* texture = GetTextureFromIndex(material, i);
+									NiPointer<NiTexture> * texture = GetTextureFromIndex(material, i);
 									if (texture)
 									{
-										textureName = texture->get()->name;
+										textureName = (*texture)->name;
 									}
 
 									_MESSAGE("Texture %d - %s (%s)", i, texturePath, textureName);
 								}
-								_MESSAGE("Flags - %08X %08X", lightingShader->shaderFlags1, lightingShader->shaderFlags2);
+								_MESSAGE("Flags - %016X", lightingShader->flags);
 								gLog.Outdent();
 							}
 						}
@@ -265,7 +269,7 @@ namespace hdt
 
 			Console_Print("[HDT-SMP] %s skeleton - owner %s (refr formid %08x, base formid %08x)",
 			              skeleton.isActiveInScene() ? "active" : "inactive",
-			              ownerName ? ownerName->GetName() : "unk_name",
+			              ownerName ? ownerName->name.c_str() : "unk_name",
 			              skelOwner ? skelOwner->formID : 0x00000000,
 			              skelOwner && skelOwner->baseForm ? skelOwner->baseForm->formID : 0x00000000
 			);
@@ -309,7 +313,7 @@ namespace hdt
 		}
 	}
 
-	bool SMPDebug_Execute(const ObScriptParam* paramInfo, ScriptData* scriptData, TESObjectREFR* thisObj,
+	/*bool SMPDebug_Execute(const ObScriptParam* paramInfo, ScriptData* scriptData, TESObjectREFR* thisObj,
 	                      TESObjectREFR* containingObj, Script* scriptObj, ScriptLocals* locals, double& result,
 	                      UInt32& opcodeOffsetPtr)
 	{
@@ -403,7 +407,7 @@ namespace hdt
 		Console_Print("[HDT-SMP] active collision meshes: %d", activeCollisionMeshes);
 
 		return true;
-	}
+	}*/
 }
 
 extern "C" {
@@ -466,13 +470,15 @@ bool F4SEPlugin_Load(const F4SEInterface* f4se)
 		if (cameraDispatcher)
 			cameraDispatcher->AddEventSink(hdt::SkyrimPhysicsWorld::get());
 
-		messageInterface->RegisterListener(skse->GetPluginHandle(), "F4SE", [](SKSEMessagingInterface::Message* msg)
+		messageInterface->RegisterListener(f4se->GetPluginHandle(), "F4SE", [](F4SEMessagingInterface::Message* msg)
 		{
 			if (msg && msg->type == F4SEMessagingInterface::kMessage_InputLoaded)
 			{
-				UI* mm = g_ui;
+				UI* mm = *g_ui;
 				if (mm)
-					mm->MenuOpenCloseEventDispatcher()->AddEventSink(&hdt::g_freezeEventHandler);
+				{
+					mm->menuOpenCloseEventSource.AddEventSink(&hdt::g_freezeEventHandler);
+				}
 				hdt::checkOldPlugins();
 				hdt::loadConfig();
 #ifdef DEBUG
@@ -496,22 +502,22 @@ bool F4SEPlugin_Load(const F4SEInterface* f4se)
 	}
 	if (hijackedCommand)
 	{
-		static ObScriptParam params[1];
-		params[0].typeID = ObScriptParam::kType_String;
-		params[0].typeStr = "String (optional)";
-		params[0].isOptional = 1;
+		//static ObScriptParam params[1];
+		//params[0].typeID = ObScriptParam::kType_String;
+		//params[0].typeStr = "String (optional)";
+		//params[0].isOptional = 1;
 
-		ObScriptCommand cmd = *hijackedCommand;
+		//ObScriptCommand cmd = *hijackedCommand;
 
-		cmd.longName = "SMPDebug";
-		cmd.shortName = "smp";
-		cmd.helpText = "smp <reset>";
-		cmd.needsParent = 0;
-		cmd.numParams = 1;
-		cmd.params = params;
-		cmd.execute = hdt::SMPDebug_Execute;
-		cmd.flags = 0;
-		SafeWriteBuf(reinterpret_cast<uintptr_t>(hijackedCommand), &cmd, sizeof(cmd));
+		//cmd.longName = "SMPDebug";
+		//cmd.shortName = "smp";
+		//cmd.helpText = "smp <reset>";
+		//cmd.needsParent = 0;
+		//cmd.numParams = 1;
+		//cmd.params = params;
+		//cmd.execute = hdt::SMPDebug_Execute;
+		//cmd.flags = 0;
+		//SafeWriteBuf(reinterpret_cast<uintptr_t>(hijackedCommand), &cmd, sizeof(cmd));
 	}
 
 	return true;

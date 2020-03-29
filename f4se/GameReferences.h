@@ -240,6 +240,9 @@ public:
 
 	UInt32 CreateRefHandle(void);
 
+	void IncRef();
+	void DecRef();
+
 	MEMBER_FN_PREFIX(TESObjectREFR);
 	DEFINE_MEMBER_FN(GetReferenceName, const char *, 0x0040B760);
 	DEFINE_MEMBER_FN(GetWorldspace, TESWorldSpace*, 0x0040F290);

@@ -26,6 +26,8 @@ public:
 	static PluginHandle	GetPluginHandle(void);
 	static UInt32		GetReleaseIndex(void);
 
+	static void* GetEventDispatcher(UInt32 dispatcherId);
+
 	static bool Dispatch_Message(PluginHandle sender, UInt32 messageType, void * data, UInt32 dataLen, const char* receiver);
 	static bool	RegisterListener(PluginHandle listener, const char* sender, F4SEMessagingInterface::EventCallback handler);
 

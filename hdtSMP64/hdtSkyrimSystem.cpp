@@ -2,6 +2,7 @@
 #include "hdtSkinnedMesh/hdtSkinnedMeshShape.h"
 #include "../hdtSSEUtils/NetImmerseUtils.h"
 #include "../hdtSSEUtils/FrameworkUtils.h"
+#include "f4se/GameCamera.h"
 #include <f4se/GameStreams.h>
 #include "f4se/GameReferences.h"
 #include "XmlReader.h"
@@ -62,7 +63,7 @@ namespace hdt
 			updateTransformUpDown(m_skeleton, true);
 			m_lastRootRotation = convertNi(m_skeleton->m_worldTransform.rot);
 		}
-		else if (m_skeleton->m_parent == (*g_thePlayer)->GetNiNode())
+		else if (m_skeleton->m_parent == (*g_player)->unkF0->rootNode)
 		{
 			if (SkyrimPhysicsWorld::get()->m_resetPc > 0)
 			{
@@ -71,7 +72,7 @@ namespace hdt
 				m_lastRootRotation = convertNi(m_skeleton->m_worldTransform.rot);
 				SkyrimPhysicsWorld::get()->m_resetPc -= 1;
 			}
-			else if (!PlayerCamera::GetSingleton()->unk162 || PlayerCamera::GetSingleton()->cameraState->stateId == 0)
+			else if (!(*g_playerCamera)->unk1A6 || (*g_playerCamera)->cameraState->stateID == 0)
 				// isWeaponSheathed or potentially isCameraFree || cameraState is first person
 			{
 				m_lastRootRotation = convertNi(m_skeleton->m_worldTransform.rot);
@@ -162,7 +163,7 @@ namespace hdt
 		if (node)
 		{
 			auto defaultBoneInfo = getBoneTemplate("");
-			bone = new SkyrimBone(node->m_name, node, defaultBoneInfo);
+			bone = new SkyrimBone(IDStr(node->m_name.c_str()), node, defaultBoneInfo);
 
 			bone->m_localToRig = defaultBoneInfo.m_centerOfMassTransform;
 			bone->m_rigToLocal = defaultBoneInfo.m_centerOfMassTransform.inverse();
@@ -687,7 +688,7 @@ namespace hdt
 
 		BoneTemplate cinfo = m_boneTemplates[cls];
 		readBoneTemplate(cinfo);
-		auto b = new SkyrimBone(node->m_name, node, cinfo);
+		auto b = new SkyrimBone(IDStr(node->m_name.c_str()), node, cinfo);
 		b->m_localToRig = cinfo.m_centerOfMassTransform;
 		b->m_rigToLocal = cinfo.m_centerOfMassTransform.inverse();
 		b->m_marginMultipler = cinfo.m_marginMultipler;
@@ -744,7 +745,7 @@ namespace hdt
 		Ref<SkyrimBody> body = new SkyrimBody;
 		body->m_name = name;
 
-		if (!triShape->m_spSkinInstance)
+		if (!triShape->skinInstance)
 		{
 			//auto bone = m_mesh->findBone(name);
 			//if (!bone)
@@ -763,13 +764,13 @@ namespace hdt
 			m_reader->skipCurrentElement();
 			return nullptr;
 		}
-		NiSkinInstance* skinInstance = triShape->m_spSkinInstance;
-		NiSkinData* skinData = skinInstance->m_spSkinData;
-		for (int boneIdx = 0; boneIdx < skinData->m_uiBones; ++boneIdx)
+		auto skinInstance = triShape->skinInstance;
+		auto bones = skinInstance->bones;
+		for (int boneIdx = 0; boneIdx < bones.count; ++boneIdx)
 		{
-			auto node = skinInstance->m_ppkBones[boneIdx];
-			auto boneData = &skinData->m_pkBoneData[boneIdx];
-			auto boundingSphere = BoundingSphere(convertNi(boneData->m_kBound.pos), boneData->m_kBound.radius);
+			auto node = skinInstance->bones[boneIdx];
+			auto boneData = skinInstance->boneData->transforms[boneIdx];
+			auto boundingSphere = BoundingSphere(convertNi(boneData.boundingSphere), boneData.radius);
 			IDStr boneName = node->m_name;
 			auto bone = m_mesh->findBone(boneName);
 			if (!bone)
@@ -779,10 +780,10 @@ namespace hdt
 				m_mesh->m_bones.push_back(bone);
 			}
 
-			body->addBone(bone, convertNi(boneData->m_kSkinToBone), boundingSphere);
+			body->addBone(bone, convertNi(boneData.transform), boundingSphere);
 		}
 
-		NiSkinPartition* skinPartition = triShape->m_spSkinInstance->m_spSkinPartition;
+		NiSkinPartition* skinPartition = triShape->skinInstance->m_spSkinPartition;
 		body->m_vertices.resize(skinPartition->vertexCount);
 
 		// vertices data are all the same in every partitions
@@ -793,7 +794,7 @@ namespace hdt
 		auto vertexBlock = partition->shapeData->m_RawVertexData;
 		UInt8* dynamicVData = nullptr;
 		if (dynamicShape)
-			dynamicVData = static_cast<UInt8*>(dynamicShape->pDynamicData);
+			dynamicVData = dynamicShape->dynamicVertices;
 
 		uint8_t boneOffset = 0;
 
@@ -934,9 +935,9 @@ namespace hdt
 
 		auto shape = new PerTriangleShape(body);
 		auto* g = castBSTriShape(findObject(m_model, name.c_str()));
-		if (g->m_spSkinInstance)
+		if (g->skinInstance)
 		{
-			NiSkinPartition* skinPartition = g->m_spSkinInstance->m_spSkinPartition;
+			NiSkinPartition* skinPartition = g->skinInstance->m_spSkinPartition;
 			for (int i = 0; i < skinPartition->m_uiPartitions; ++i)
 			{
 				auto& partition = skinPartition->m_pkPartitions[i];
@@ -1130,7 +1131,7 @@ namespace hdt
 			if (node)
 			{
 				auto defaultBoneInfo = getBoneTemplate("");
-				bodyA = new SkyrimBone(node->m_name, node, defaultBoneInfo);
+				bodyA = new SkyrimBone(IDStr(node->m_name.c_str()), node, defaultBoneInfo);
 				bodyA->m_localToRig = defaultBoneInfo.m_centerOfMassTransform;
 				bodyA->m_rigToLocal = defaultBoneInfo.m_centerOfMassTransform.inverse();
 				bodyA->m_marginMultipler = defaultBoneInfo.m_marginMultipler;
@@ -1151,7 +1152,7 @@ namespace hdt
 			if (node)
 			{
 				auto defaultBoneInfo = getBoneTemplate("");
-				bodyB = new SkyrimBone(node->m_name, node, defaultBoneInfo);
+				bodyB = new SkyrimBone(IDStr(node->m_name.c_str()), node, defaultBoneInfo);
 				bodyB->m_localToRig = defaultBoneInfo.m_centerOfMassTransform;
 				bodyB->m_rigToLocal = defaultBoneInfo.m_centerOfMassTransform.inverse();
 				bodyB->m_marginMultipler = defaultBoneInfo.m_marginMultipler;

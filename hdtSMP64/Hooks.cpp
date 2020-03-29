@@ -1,6 +1,7 @@
 #include <detours.h>
 
 #include "f4se/GameForms.h"
+#include "f4se/GameObjects.h"
 #include "f4se/GameReferences.h"
 #include "f4se/NiObjects.h"
 #include "f4se/BSGeometry.h"
@@ -37,12 +38,12 @@ namespace hdt
 			{
 				auto bname = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESFullName);
 				if (bname)
-					name = bname->GetName();
+					name = bname->name;
 
 				auto bnpc = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESNPC);
 
-				if (bnpc && bnpc->nextTemplate)
-					formId = bnpc->nextTemplate->formID;
+				if (bnpc && bnpc->templateNPC)
+					formId = bnpc->templateNPC->formID;
 			}
 
 			_MESSAGE("SkinSingleGeometry %s %d - %s, %s, (formid %08x base form %08x head template form %08x)",
@@ -73,12 +74,12 @@ namespace hdt
 			{
 				auto bname = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESFullName);
 				if (bname)
-					name = bname->GetName();
+					name = bname->name.c_str();
 
 				auto bnpc = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESNPC);
 
-				if (bnpc && bnpc->nextTemplate)
-					formId = bnpc->nextTemplate->formID;
+				if (bnpc && bnpc->templateNPC)
+					formId = bnpc->templateNPC->formID;
 			}
 
 			_MESSAGE("SkinAllGeometry %s %d, %s, (formid %08x base form %08x head template form %08x)",

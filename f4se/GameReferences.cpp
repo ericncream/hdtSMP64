@@ -36,6 +36,16 @@ UInt32 TESObjectREFR::CreateRefHandle(void)
 	}
 }
 
+void TESObjectREFR::IncRef()
+{
+	handleRefObject.IncRef();
+}
+
+void TESObjectREFR::DecRef()
+{
+	handleRefObject.DecRef();
+}
+
 bool Actor::GetEquippedExtraData(UInt32 slotIndex, ExtraDataList ** extraData)
 {
 	// Invalid slot id

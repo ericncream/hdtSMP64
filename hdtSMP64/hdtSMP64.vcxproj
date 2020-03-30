@@ -19,7 +19,7 @@
     <ProjectGuid>{B9F47E7B-068A-419A-9AA8-F72CCE662C2B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>hdtSSEPhysics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <ProjectName>hdtSMP64</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -32,7 +32,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -66,7 +66,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(SolutionDir)..;F:\skyrim-dev\bullet\src;$(SolutionDir)detours\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\skyrim-dev\bullet\build\lib\Release;F:\skyrim-dev\detours\lib.X64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>F:\fallout\HDT\bullet3-master\build_cmake\lib\Release;F:\fallout\HDT\Detours-master\lib.X64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_noAVX|x64'">
     <LinkIncremental>false</LinkIncremental>

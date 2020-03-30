@@ -1,4 +1,5 @@
 #include "hdtDefaultBBP.h"
+#include "f4se/NiExtraData.h"
 #include "f4se/GameRTTI.h"
 #include "f4se/NiRTTI.h"
 #include "XmlReader.h"
@@ -95,12 +96,12 @@ namespace hdt
 	{
 		for (int i = 0; i < scan->m_extraData->count; ++i)
 		{
-			NiExtraData extraData;
-			auto extraDataPtr = &extraData;
-			scan->m_extraData->GetNthItem(i, extraDataPtr);
-			auto stringData = DYNAMIC_CAST(extraDataPtr, NiExtraData, NiStringExtraData);
-			if (stringData && !strcmp(stringData->m_string.c_str(), "HDT Skinned Mesh Physics Object") && stringData->m_string.c_str())
-				return std::string(stringData->m_string.c_str());
+			//NiExtraData extraData;
+			//auto extraDataPtr = &extraData;
+			//scan->m_extraData->GetNthItem(i, extraDataPtr);
+			//auto stringData = DYNAMIC_CAST(extraDataPtr, NiExtraData, NiStringExtraData);
+			//if (stringData && !strcmp(stringData->m_string.c_str(), "HDT Skinned Mesh Physics Object") && stringData->m_string.c_str())
+			//	return std::string(stringData->m_string.c_str());
 		}
 
 		return scanDefaultBBP(scan);

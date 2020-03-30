@@ -783,56 +783,56 @@ namespace hdt
 			body->addBone(bone, convertNi(boneData.transform), boundingSphere);
 		}
 
-		NiSkinPartition* skinPartition = triShape->skinInstance->m_spSkinPartition;
-		body->m_vertices.resize(skinPartition->vertexCount);
+		//NiSkinPartition* skinPartition = triShape->skinInstance->m_spSkinPartition;
+		//body->m_vertices.resize(skinPartition->vertexCount);
 
-		// vertices data are all the same in every partitions
-		auto partition = skinPartition->m_pkPartitions;
-		auto vFlags = NiSkinPartition::GetVertexFlags(partition->vertexDesc);
-		auto vSize = NiSkinPartition::GetVertexSize(partition->vertexDesc);
+		//// vertices data are all the same in every partitions
+		//auto partition = skinPartition->m_pkPartitions;
+		//auto vFlags = NiSkinPartition::GetVertexFlags(partition->vertexDesc);
+		//auto vSize = NiSkinPartition::GetVertexSize(partition->vertexDesc);
 
-		auto vertexBlock = partition->shapeData->m_RawVertexData;
-		UInt8* dynamicVData = nullptr;
-		if (dynamicShape)
-			dynamicVData = dynamicShape->dynamicVertices;
+		//auto vertexBlock = partition->shapeData->m_RawVertexData;
+		//UInt8* dynamicVData = nullptr;
+		//if (dynamicShape)
+		//	dynamicVData = dynamicShape->dynamicVertices;
 
-		uint8_t boneOffset = 0;
+		//uint8_t boneOffset = 0;
 
-		if (vFlags & VF_VERTEX)
-			boneOffset += 16;
-		if (vFlags & VF_UV)
-			boneOffset += 4;
-		if (vFlags & VF_UV_2)
-			boneOffset += 4;
-		if (vFlags & VF_NORMAL)
-			boneOffset += 4;
-		if (vFlags & VF_TANGENT)
-			boneOffset += 4;
-		if (vFlags & VF_COLORS)
-			boneOffset += 4;
+		//if (vFlags & VF_VERTEX)
+		//	boneOffset += 16;
+		//if (vFlags & VF_UV)
+		//	boneOffset += 4;
+		//if (vFlags & VF_UV_2)
+		//	boneOffset += 4;
+		//if (vFlags & VF_NORMAL)
+		//	boneOffset += 4;
+		//if (vFlags & VF_TANGENT)
+		//	boneOffset += 4;
+		//if (vFlags & VF_COLORS)
+		//	boneOffset += 4;
 
-		for (int j = 0; j < skinPartition->vertexCount; ++j)
-		{
-			NiPoint3* vertexPos;
+		//for (int j = 0; j < skinPartition->vertexCount; ++j)
+		//{
+		//	NiPoint3* vertexPos;
 
-			if (dynamicShape)
-				vertexPos = reinterpret_cast<NiPoint3*>(&dynamicVData[j * 16]);
-			else
-				vertexPos = reinterpret_cast<NiPoint3*>(&vertexBlock[j * vSize]);
+		//	if (dynamicShape)
+		//		vertexPos = reinterpret_cast<NiPoint3*>(&dynamicVData[j * 16]);
+		//	else
+		//		vertexPos = reinterpret_cast<NiPoint3*>(&vertexBlock[j * vSize]);
 
-			body->m_vertices[j].m_skinPos = convertNi(*vertexPos);
+		//	body->m_vertices[j].m_skinPos = convertNi(*vertexPos);
 
-			SkyrimSystem::BoneData* boneData = reinterpret_cast<SkyrimSystem::BoneData*>(&vertexBlock[j * vSize +
-				boneOffset]);
+		//	SkyrimSystem::BoneData* boneData = reinterpret_cast<SkyrimSystem::BoneData*>(&vertexBlock[j * vSize +
+		//		boneOffset]);
 
-			for (int k = 0; k < partition->m_usBonesPerVertex && k < 4; ++k)
-			{
-				auto localBoneIndex = boneData->boneIndices[k];
-				assert(localBoneIndex < body->m_skinnedBones.size());
-				body->m_vertices[j].m_boneIdx[k] = localBoneIndex;
-				float32(&body->m_vertices[j].m_weight[k], boneData->boneWeights[k]);
-			}
-		}
+		//	for (int k = 0; k < partition->m_usBonesPerVertex && k < 4; ++k)
+		//	{
+		//		auto localBoneIndex = boneData->boneIndices[k];
+		//		assert(localBoneIndex < body->m_skinnedBones.size());
+		//		body->m_vertices[j].m_boneIdx[k] = localBoneIndex;
+		//		float32(&body->m_vertices[j].m_weight[k], boneData->boneWeights[k]);
+		//	}
+		//}
 
 		for (auto& i : body->m_vertices)
 			i.sortWeight();
@@ -937,14 +937,14 @@ namespace hdt
 		auto* g = castBSTriShape(findObject(m_model, name.c_str()));
 		if (g->skinInstance)
 		{
-			NiSkinPartition* skinPartition = g->skinInstance->m_spSkinPartition;
-			for (int i = 0; i < skinPartition->m_uiPartitions; ++i)
-			{
-				auto& partition = skinPartition->m_pkPartitions[i];
-				for (int j = 0; j < partition.m_usTriangles; ++j)
-					shape->addTriangle(partition.m_pusTriList[j * 3], partition.m_pusTriList[j * 3 + 1],
-					                   partition.m_pusTriList[j * 3 + 2]);
-			}
+			//NiSkinPartition* skinPartition = g->skinInstance->m_spSkinPartition;
+			//for (int i = 0; i < skinPartition->m_uiPartitions; ++i)
+			//{
+			//	auto& partition = skinPartition->m_pkPartitions[i];
+			//	for (int j = 0; j < partition.m_usTriangles; ++j)
+			//		shape->addTriangle(partition.m_pusTriList[j * 3], partition.m_pusTriList[j * 3 + 1],
+			//		                   partition.m_pusTriList[j * 3 + 2]);
+			//}
 		}
 		else
 		{

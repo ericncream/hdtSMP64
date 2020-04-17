@@ -14,7 +14,6 @@ RegistrationSetHolder<NullParameters>							g_cameraEventRegs;
 RegistrationSetHolder<FormParameters>							g_furnitureEventRegs;
 
 F4SEFurnitureEventSink g_furnitureEventSink;
-F4SECameraEventSink    g_cameraEventSink;
 
 EventResult	F4SEFurnitureEventSink::ReceiveEvent(TESFurnitureEvent * evn, void * dispatcher)
 {
@@ -34,30 +33,5 @@ EventResult	F4SEFurnitureEventSink::ReceiveEvent(TESFurnitureEvent * evn, void *
 		return true;
 	});
 #endif
-	return kEvent_Continue;
-}
-
-EventResult F4SECameraEventSink::ReceiveEvent(F4SECameraEvent* evn, void * dispatcher)
-{
-	SInt32 oldState = -1;
-	SInt32 newState = -1;
-
-	PlayerCamera* playerCamera = *g_playerCamera;
-	if (playerCamera) {
-		for (int i = 0; i < PlayerCamera::kNumCameraStates; i++) {
-			if (evn->oldState == playerCamera->cameraStates[i])
-				oldState = i;
-			if (evn->newState == playerCamera->cameraStates[i])
-				newState = i;
-		}
-	}
-
-	g_cameraEventRegs.ForEach(
-		[&oldState, &newState](const EventRegistration<NullParameters>& reg)
-		{
-			SendPapyrusEvent2<SInt32, SInt32>(reg.handle, reg.scriptName, "OnPlayerCameraState", oldState, newState);
-		}
-	);
-
 	return kEvent_Continue;
 }

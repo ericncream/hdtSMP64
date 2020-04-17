@@ -14,7 +14,7 @@ namespace hdt
 	constexpr float RESET_PHYSICS = -10.0f;
 
 	class SkyrimPhysicsWorld : public SkinnedMeshWorld, public IEventListener<FrameEvent>,
-	                           public IEventListener<ShutdownEvent>, public BSTEventSink<F4SECameraEvent>
+	                           public IEventListener<ShutdownEvent>//, public BSTEventSink<F4SECameraEvent>
 	{
 	public:
 
@@ -33,7 +33,7 @@ namespace hdt
 		void onEvent(const FrameEvent& e) override;
 		void onEvent(const ShutdownEvent& e) override;
 
-		EventResult ReceiveEvent(F4SECameraEvent* evn, void * dispatcher) override;
+		//EventResult ReceiveEvent(F4SECameraEvent* evn, void * dispatcher) override;
 
 		bool isSuspended() { return m_suspended; }
 

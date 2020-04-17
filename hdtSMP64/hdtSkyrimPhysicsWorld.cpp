@@ -233,7 +233,7 @@ namespace hdt
 			resume();
 
 		std::lock_guard<decltype(m_lock)> l(m_lock);
-		float interval = *(float*)(RelocationManager::s_baseAddr + offset::GameStepTimer_SlowTime);
+		float interval = 1.0;// *(float*)(RelocationManager::s_baseAddr + offset::GameStepTimer_SlowTime);
 
 		if (interval > FLT_EPSILON && !m_suspended && !m_systems.empty())
 		{
@@ -264,13 +264,13 @@ namespace hdt
 		m_systems.clear();
 	}
 
-	EventResult SkyrimPhysicsWorld::ReceiveEvent(F4SECameraEvent* evn, void * dispatcher)
-	{
-		if (evn && evn->oldState && evn->newState)
-			if (evn->oldState->stateID == 0 && evn->newState->stateID == 9)
-			{
-				m_resetPc = 3;
-			}
-		return kEvent_Continue;
-	}
+	//EventResult SkyrimPhysicsWorld::ReceiveEvent(F4SECameraEvent* evn, void * dispatcher)
+	//{
+	//	if (evn && evn->oldState && evn->newState)
+	//		if (evn->oldState->stateID == 0 && evn->newState->stateID == 9)
+	//		{
+	//			m_resetPc = 3;
+	//		}
+	//	return kEvent_Continue;
+	//}
 }

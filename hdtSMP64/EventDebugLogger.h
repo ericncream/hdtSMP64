@@ -5,6 +5,18 @@
 #include "HookEvents.h"
 #include "IEventListener.h"
 
+struct TESCellAttachDetachEvent
+{
+	TESObjectREFR* reference;	// 00
+	UInt8			attached;	// 08	- 01 - attached, 00 - detached
+};
+
+struct TESMoveAttachDetachEvent
+{
+	TESObjectREFR* reference;	// 00
+	UInt8			attached;	// 08	- 01 - attached, 00 - detached
+};
+
 namespace hdt
 {
 	class EventDebugLogger

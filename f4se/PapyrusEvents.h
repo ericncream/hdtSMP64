@@ -1,7 +1,5 @@
 #pragma once
 
-#include "f4se/GameCamera.h"
-
 #include "f4se/PapyrusVM.h"
 #include "f4se/PapyrusValue.h"
 #include "f4se/PapyrusArgs.h"
@@ -574,23 +572,6 @@ public:
 };
 
 extern F4SEFurnitureEventSink g_furnitureEventSink;
-
-struct F4SECameraEvent
-{
-	TESCameraState* oldState;
-	TESCameraState* newState;
-
-	F4SECameraEvent(TESCameraState* a_oldState, TESCameraState* a_newState) :
-		oldState(a_oldState), newState(a_newState) {}
-};
-
-class F4SECameraEventSink : public BSTEventSink <F4SECameraEvent>
-{
-public:
-	virtual	EventResult ReceiveEvent(F4SECameraEvent* evn, void * dispatcher) override;
-};
-
-extern F4SECameraEventSink g_cameraEventSink;
 
 #define NUM_PARAMS 1
 #include "PapyrusEventsDef.inl"

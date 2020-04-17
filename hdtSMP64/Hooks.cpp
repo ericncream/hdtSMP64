@@ -113,9 +113,11 @@ namespace hdt
 		DetourAttach((void**)BSFaceGenNiNodeEx::_SkinAllGeometry_GetPtrAddr(),
 			(void*)GetFnAddr(&BSFaceGenNiNodeEx::SkinAllGeometry));
 
-		RelocAddr<uintptr_t> addr(offset::BSFaceGenNiNode_SkinSingleGeometry_bug);
-		SafeWrite8(addr.GetUIntPtr(), 0x7);
+		// change 8->7
+		//RelocAddr<uintptr_t> addr(offset::BSFaceGenNiNode_SkinSingleGeometry_bug);
+		//SafeWrite8(addr.GetUIntPtr(), 0x7);
 
+		// gunna have to rewrite dis
 		struct BSFaceGenExtraModelData_BoneCount_Code : Xbyak::CodeGenerator
 		{
 			BSFaceGenExtraModelData_BoneCount_Code(void* buf) : CodeGenerator(4096, buf)
@@ -212,13 +214,13 @@ namespace hdt
 	void hookEngine()
 	{
 		DetourAttach((void**)UnkEngine::_onFrame_GetPtrAddr(), (void*)GetFnAddr(&UnkEngine::onFrame));
-		DetourAttach((void**)&oldShutdown, static_cast<void*>(shutdown));
+		//DetourAttach((void**)&oldShutdown, static_cast<void*>(shutdown));
 	}
 
 	void unhookEngine()
 	{
 		DetourDetach((void**)UnkEngine::_onFrame_GetPtrAddr(), (void*)GetFnAddr(&UnkEngine::onFrame));
-		DetourDetach((void**)&oldShutdown, static_cast<void*>(shutdown));
+		//DetourDetach((void**)&oldShutdown, static_cast<void*>(shutdown));
 	}
 
 	void hookAll()
@@ -226,8 +228,8 @@ namespace hdt
 		DetourRestoreAfterWith();
 		DetourTransactionBegin();
 		hookEngine();
-		hookArmor();
-		hookFaceGen();
+		//hookArmor();
+		//hookFaceGen();
 		DetourTransactionCommit();
 	}
 
@@ -236,8 +238,8 @@ namespace hdt
 		DetourRestoreAfterWith();
 		DetourTransactionBegin();
 		unhookEngine();
-		unhookArmor();
-		unhookFaceGen();
+		//unhookArmor();
+		//unhookFaceGen();
 		DetourTransactionCommit();
 	}
 }

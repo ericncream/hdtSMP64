@@ -118,6 +118,12 @@
       <AdditionalDependencies>BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>F:\fallout\HDT\Detours-master\lib.X64;F:\fallout\HDT\bullet3-master\build_cmake\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(Fallout4Path)\$(TargetFileName)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Installing DLL to FO4 Plugins...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_noAVX|x64'">
     <ClCompile>

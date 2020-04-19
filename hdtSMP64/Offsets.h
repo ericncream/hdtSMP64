@@ -31,7 +31,7 @@ namespace hdt
 		// E8 ? ? ? ? 84 DB 74 24 
 		constexpr std::uintptr_t GameLoopFunction = 0x02042430; // updated
 		// E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 85 C9 74 0C E8 ? ? ? ? 
-		constexpr std::uintptr_t GameShutdownFunction = 0x014813F0; // not updated
+		constexpr std::uintptr_t GameShutdownFunction = 0x027D4DF0; // updated
 
 		// FaceGeom string
 		constexpr std::uintptr_t TESNPC_GetFaceGeomPath = 0x005B8F90; // updated

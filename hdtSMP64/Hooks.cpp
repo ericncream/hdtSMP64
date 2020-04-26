@@ -124,8 +124,8 @@ namespace hdt
 				Xbyak::Label j_Out;
 
 				lea(rsi, ptr[rbx + rcx * 8]);
-				cmp(rsi, 9);
-				jl(j_Out);
+				cmp(rsi, 9); // if rsi < 9
+				jl(j_Out);   // jump to j_Out
 				mov(rsi, 8);
 				L(j_Out);
 				jmp(ptr[rip]);

@@ -9,7 +9,7 @@ namespace hdt
 	{
 		
 		// hdtSkyrimPhysicsWorld.cpp
-		// 74 35 45 33 C0 33 D2
+		// F3 44 0F 58 E1 F3 0F 59 05 ? ? ? ? 
 		constexpr std::uintptr_t GameStepTimer_SlowTime = 0x05B5B6D0; // maybe?
 
 		
@@ -37,7 +37,7 @@ namespace hdt
 		constexpr std::uintptr_t TESNPC_GetFaceGeomPath = 0x005B8F90; // updated
 
 		// BSFaceGenModelExtraData Bone Limit
-		// 8B 70 58 EB 02 
+		// 48 8D 34 CB 48 3B DE 74 24 0F 1F 84 00 ? ? ? ? 
 		constexpr std::uintptr_t BSFaceGenModelExtraData_BoneLimit = 0x006935DF; // updated
 	}
 }

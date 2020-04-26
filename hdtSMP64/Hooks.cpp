@@ -117,20 +117,19 @@ namespace hdt
 		//RelocAddr<uintptr_t> addr(offset::BSFaceGenNiNode_SkinSingleGeometry_bug);
 		//SafeWrite8(addr.GetUIntPtr(), 0x7);
 
-		// gunna have to rewrite dis
 		struct BSFaceGenExtraModelData_BoneCount_Code : Xbyak::CodeGenerator
 		{
 			BSFaceGenExtraModelData_BoneCount_Code(void* buf) : CodeGenerator(4096, buf)
 			{
 				Xbyak::Label j_Out;
 
-				mov(esi, ptr[rax + 0x58]);
-				cmp(esi, 9);
+				lea(rsi, ptr[rbx + rcx * 8]);
+				cmp(rsi, 9);
 				jl(j_Out);
-				mov(esi, 8);
+				mov(rsi, 8);
 				L(j_Out);
 				jmp(ptr[rip]);
-				dq(BoneLimit.GetUIntPtr() + 0x7);
+				dq(BoneLimit.GetUIntPtr() + 0x44);
 			}
 		};
 

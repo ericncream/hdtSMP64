@@ -113,6 +113,7 @@ namespace hdt
 		DetourAttach((void**)BSFaceGenNiNodeEx::_SkinAllGeometry_GetPtrAddr(),
 			(void*)GetFnAddr(&BSFaceGenNiNodeEx::SkinAllGeometry));
 
+		// TODO may have to change this
 		// change 8->7
 		//RelocAddr<uintptr_t> addr(offset::BSFaceGenNiNode_SkinSingleGeometry_bug);
 		//SafeWrite8(addr.GetUIntPtr(), 0x7);
@@ -213,13 +214,13 @@ namespace hdt
 	void hookEngine()
 	{
 		DetourAttach((void**)UnkEngine::_onFrame_GetPtrAddr(), (void*)GetFnAddr(&UnkEngine::onFrame));
-		//DetourAttach((void**)&oldShutdown, static_cast<void*>(shutdown));
+		DetourAttach((void**)&oldShutdown, static_cast<void*>(shutdown));
 	}
 
 	void unhookEngine()
 	{
 		DetourDetach((void**)UnkEngine::_onFrame_GetPtrAddr(), (void*)GetFnAddr(&UnkEngine::onFrame));
-		//DetourDetach((void**)&oldShutdown, static_cast<void*>(shutdown));
+		DetourDetach((void**)&oldShutdown, static_cast<void*>(shutdown));
 	}
 
 	void hookAll()
@@ -227,8 +228,8 @@ namespace hdt
 		DetourRestoreAfterWith();
 		DetourTransactionBegin();
 		hookEngine();
-		//hookArmor();
-		//hookFaceGen();
+		hookArmor();
+		hookFaceGen();
 		DetourTransactionCommit();
 	}
 
@@ -237,8 +238,8 @@ namespace hdt
 		DetourRestoreAfterWith();
 		DetourTransactionBegin();
 		unhookEngine();
-		//unhookArmor();
-		//unhookFaceGen();
+		unhookArmor();
+		unhookFaceGen();
 		DetourTransactionCommit();
 	}
 }

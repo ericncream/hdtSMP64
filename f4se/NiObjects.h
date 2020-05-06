@@ -192,8 +192,9 @@ public:
 	};
 
 	UInt64			flags;				// 108
-	void			* unk110;			// 110
-	TESObjectREFR*  m_owner;             // 118
+	TESObjectREFR*  m_owner;			// 110
+	float			unk118;				// 118
+	UInt32			unk11C;				// 11C
 
 	MEMBER_FN_PREFIX(NiAVObject);
 	DEFINE_MEMBER_FN(GetAVObjectByName, NiAVObject*, 0x01C93980, BSFixedString * name, bool unk1, bool unk2);

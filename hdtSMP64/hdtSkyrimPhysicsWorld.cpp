@@ -225,43 +225,43 @@ namespace hdt
 
 	void SkyrimPhysicsWorld::onEvent(const FrameEvent& e)
 	{
-		auto mm = *g_ui;
+		//auto mm = *g_ui;
 
-		if ((e.gamePaused || mm->numPauseGame) && !m_suspended)
-			suspend();
-		else if (!(e.gamePaused || mm->numPauseGame) && m_suspended)
-			resume();
+		//if ((e.gamePaused || mm->numPauseGame) && !m_suspended)
+		//	suspend();
+		//else if (!(e.gamePaused || mm->numPauseGame) && m_suspended)
+		//	resume();
 
-		std::lock_guard<decltype(m_lock)> l(m_lock);
-		float interval = 1.0;// *(float*)(RelocationManager::s_baseAddr + offset::GameStepTimer_SlowTime);
+		//std::lock_guard<decltype(m_lock)> l(m_lock);
+		//float interval = 1.0;// *(float*)(RelocationManager::s_baseAddr + offset::GameStepTimer_SlowTime);
 
-		if (interval > FLT_EPSILON && !m_suspended && !m_systems.empty())
-		{
-			doUpdate(interval);
-		}
-		else if (m_suspended && !m_loading)
-		{
-			writeTransform();
-		}
+		//if (interval > FLT_EPSILON && !m_suspended && !m_systems.empty())
+		//{
+		//	doUpdate(interval);
+		//}
+		//else if (m_suspended && !m_loading)
+		//{
+		//	writeTransform();
+		//}
 	}
 
 	void SkyrimPhysicsWorld::onEvent(const ShutdownEvent& e)
 	{
-		for (auto system : m_systems)
-		{
-			for (int i = 0; i < system->m_meshes.size(); ++i)
-				removeCollisionObject(system->m_meshes[i]);
-			for (int i = 0; i < system->m_constraints.size(); ++i)
-				removeConstraint(system->m_constraints[i]->m_constraint);
-			for (int i = 0; i < system->m_bones.size(); ++i)
-				removeRigidBody(&system->m_bones[i]->m_rig);
+		//for (auto system : m_systems)
+		//{
+		//	for (int i = 0; i < system->m_meshes.size(); ++i)
+		//		removeCollisionObject(system->m_meshes[i]);
+		//	for (int i = 0; i < system->m_constraints.size(); ++i)
+		//		removeConstraint(system->m_constraints[i]->m_constraint);
+		//	for (int i = 0; i < system->m_bones.size(); ++i)
+		//		removeRigidBody(&system->m_bones[i]->m_rig);
 
-			for (auto i : system->m_constraintGroups)
-				for (auto j : i->m_constraints)
-					removeConstraint(j->m_constraint);
-		}
+		//	for (auto i : system->m_constraintGroups)
+		//		for (auto j : i->m_constraints)
+		//			removeConstraint(j->m_constraint);
+		//}
 
-		m_systems.clear();
+		//m_systems.clear();
 	}
 
 	//EventResult SkyrimPhysicsWorld::ReceiveEvent(F4SECameraEvent* evn, void * dispatcher)

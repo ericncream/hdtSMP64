@@ -49,19 +49,19 @@ namespace hdt
 
 		//// TODO: replace this with a generic skeleton fixing configuration option
 		//// hardcode an exception for lurker skeletons because they are made incorrectly
-		//if (e.skeleton->m_owner && e.skeleton->m_owner->baseForm)
-		//{
-		//	auto npcForm = DYNAMIC_CAST(e.skeleton->m_owner->baseForm, TESForm, TESNPC);
-		//	if (npcForm && npcForm->race.race)
-		//	{
-		//		// TODO FO4 : fix this
-		//		if (!strcmp(npcForm->race.race->models[0].GetModelName(),
-		//		            "Actors\\DLC02\\BenthicLurker\\Character Assets\\skeleton.nif"))
-		//		{
-		//			npc = findNode(e.skeleton, "NPC Root [Root]");
-		//		}
-		//	}
-		//}
+		////if (e.skeleton->m_owner && e.skeleton->m_owner->baseForm)
+		////{
+		////	auto npcForm = DYNAMIC_CAST(e.skeleton->m_owner->baseForm, TESForm, TESNPC);
+		////	if (npcForm && npcForm->race.race)
+		////	{
+		////		// TODO FO4 : fix this
+		////		if (!strcmp(npcForm->race.race->models[0].GetModelName(),
+		////		            "Actors\\DLC02\\BenthicLurker\\Character Assets\\skeleton.nif"))
+		////		{
+		////			npc = findNode(e.skeleton, "NPC Root [Root]");
+		////		}
+		////	}
+		////}
 
 		//std::lock_guard<decltype(m_lock)> l(m_lock);
 		//if (m_shutdown) return;
@@ -115,38 +115,38 @@ namespace hdt
 
 	void ActorManager::reloadMeshes()
 	{
-		//const FrameEvent e
-		//{
-		//	false
-		//};
+		const FrameEvent e
+		{
+			false
+		};
 
-		//onEvent(e);
+		onEvent(e);
 
-		//for (auto& i : m_skeletons)
-		//{
-		//	for (auto& j : i.armors)
-		//	{
-		//		if (j.physics && j.physics->m_world)
-		//			j.physics->m_world->removeSkinnedMeshSystem(j.physics);
+		for (auto& i : m_skeletons)
+		{
+			for (auto& j : i.armors)
+			{
+				if (j.physics && j.physics->m_world)
+					j.physics->m_world->removeSkinnedMeshSystem(j.physics);
 
-		//		j.physics = nullptr;
+				j.physics = nullptr;
 
-		//		if (!isFirstPersonSkeleton(i.skeleton))
-		//		{
-		//			std::unordered_map<IDStr, IDStr> renameMap = j.renameMap;
+				if (!isFirstPersonSkeleton(i.skeleton))
+				{
+					std::unordered_map<IDStr, IDStr> renameMap = j.renameMap;
 
-		//			auto system = SkyrimSystemCreator().createSystem(i.npc, j.armorWorn, j.physicsFile, std::move(renameMap));
+					auto system = SkyrimSystemCreator().createSystem(i.npc, j.armorWorn, j.physicsFile, std::move(renameMap));
 
-		//			if (system)
-		//			{
-		//				SkyrimPhysicsWorld::get()->addSkinnedMeshSystem(system);
-		//				j.physics = system;
-		//			}
-		//		}
-		//	}
+					if (system)
+					{
+						SkyrimPhysicsWorld::get()->addSkinnedMeshSystem(system);
+						j.physics = system;
+					}
+				}
+			}
 
-		//	i.scanHead();
-		//}
+			i.scanHead();
+		}
 	}
 
 	void ActorManager::onEvent(const FrameEvent& e)
@@ -215,7 +215,8 @@ namespace hdt
 
 	void ActorManager::onEvent(const SkinSingleHeadGeometryEvent& e)
 	{
-		//auto npc = findNode(e.skeleton, "NPC");
+		//// TODO FO4: Update node name
+		//auto npc = findNode(e.skeleton, "Root");
 
 		//if (!npc) return;
 
@@ -257,7 +258,8 @@ namespace hdt
 
 	void ActorManager::onEvent(const SkinAllHeadGeometryEvent& e)
 	{
-		//auto npc = findNode(e.skeleton, "NPC");
+		//// TODO FO4: Update node name
+		//auto npc = findNode(e.skeleton, "Root");
 
 		//if (!npc) return;
 
@@ -292,68 +294,68 @@ namespace hdt
 
 	ActorManager::Skeleton& ActorManager::getSkeletonData(NiNode* skeleton)
 	{
-		//auto iter = std::find_if(m_skeletons.begin(), m_skeletons.end(), [=](Skeleton& i)
-		//{
-		//	return i.skeleton == skeleton;
-		//});
-		//if (iter != m_skeletons.end())
-		//{
-		//	return *iter;
-		//}
-		//if (!isFirstPersonSkeleton(skeleton))
-		//{
-		//	auto ownerIter = std::find_if(m_skeletons.begin(), m_skeletons.end(), [=](Skeleton& i)
-		//	{
-		//		return !isFirstPersonSkeleton(i.skeleton) && i.skeletonOwner && skeleton->m_owner && i.skeletonOwner ==
-		//			skeleton->m_owner;
-		//	});
-		//	if (ownerIter != m_skeletons.end())
-		//	{
-		//		_DMESSAGE("new skeleton found for formid %08x", skeleton->m_owner->formID);
-		//		ownerIter->cleanHead(true);
-		//	}
-		//}
-		//m_skeletons.push_back(Skeleton());
-		//m_skeletons.back().skeleton = skeleton;
-		//return m_skeletons.back();
+		auto iter = std::find_if(m_skeletons.begin(), m_skeletons.end(), [=](Skeleton& i)
+		{
+			return i.skeleton == skeleton;
+		});
+		if (iter != m_skeletons.end())
+		{
+			return *iter;
+		}
+		if (!isFirstPersonSkeleton(skeleton))
+		{
+			auto ownerIter = std::find_if(m_skeletons.begin(), m_skeletons.end(), [=](Skeleton& i)
+			{
+				return !isFirstPersonSkeleton(i.skeleton) && i.skeletonOwner && skeleton->m_owner && i.skeletonOwner ==
+					skeleton->m_owner;
+			});
+			if (ownerIter != m_skeletons.end())
+			{
+				_DMESSAGE("new skeleton found for formid %08x", skeleton->m_owner->formID);
+				ownerIter->cleanHead(true);
+			}
+		}
+		m_skeletons.push_back(Skeleton());
+		m_skeletons.back().skeleton = skeleton;
+		return m_skeletons.back();
 	}
 
 	void ActorManager::Skeleton::doSkeletonMerge(NiNode* dst, NiNode* src, IString* prefix,
 	                                             std::unordered_map<IDStr, IDStr>& map)
 	{
-		//for (int i = 0; i < src->m_children.m_arrayBufLen; ++i)
-		//{
-		//	auto srcChild = castNiNode(src->m_children.m_data[i]);
-		//	if (!srcChild) continue;
+		for (int i = 0; i < src->m_children.m_arrayBufLen; ++i)
+		{
+			auto srcChild = castNiNode(src->m_children.m_data[i]);
+			if (!srcChild) continue;
 
-		//	if (!srcChild->m_name)
-		//	{
-		//		doSkeletonMerge(dst, srcChild, prefix, map);
-		//		continue;
-		//	}
+			if (!srcChild->m_name)
+			{
+				doSkeletonMerge(dst, srcChild, prefix, map);
+				continue;
+			}
 
-		//	auto dstChild = findNode(dst, srcChild->m_name);
-		//	if (dstChild)
-		//	{
-		//		doSkeletonMerge(dstChild, srcChild, prefix, map);
-		//	}
-		//	else
-		//	{
-		//		dst->AttachChild(cloneNodeTree(srcChild, prefix, map), false);
-		//	}
-		//}
+			auto dstChild = findNode(dst, srcChild->m_name);
+			if (dstChild)
+			{
+				doSkeletonMerge(dstChild, srcChild, prefix, map);
+			}
+			else
+			{
+				dst->AttachChild(cloneNodeTree(srcChild, prefix, map), false);
+			}
+		}
 	}
 
 	NiNode* ActorManager::Skeleton::cloneNodeTree(NiNode* src, IString* prefix, std::unordered_map<IDStr, IDStr>& map)
 	{
-		//NiCloningProcess c;
-		//auto ret = static_cast<NiNode*>(src->CreateClone(&c));
-		//src->Unk_20(&c);
+		NiCloningProcess c;
+		auto ret = static_cast<NiNode*>(src->CreateClone(&c));
+		src->Unk_20(&c);
 
-		//renameTree(src, prefix, map);
-		//renameTree(ret, prefix, map);
+		renameTree(src, prefix, map);
+		renameTree(ret, prefix, map);
 
-		//return ret;
+		return ret;
 	}
 
 	void ActorManager::Skeleton::renameTree(NiNode* root, IString* prefix, std::unordered_map<IDStr, IDStr>& map)

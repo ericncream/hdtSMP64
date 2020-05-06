@@ -51,7 +51,7 @@ namespace hdt
 
 		struct Skeleton
 		{
-			//NiPointer<TESObjectREFR> skeletonOwner;
+			TESObjectREFR* skeletonOwner;
 			Ref<NiNode> skeleton;
 			Ref<NiNode> npc;
 			std::vector<Armor> armors;

@@ -34,11 +34,13 @@ namespace hdt
 			const char* name = "";
 			uint32_t formId = 0x0;
 
+			_DMESSAGE("Init Skin Single Geometry...");
+
 			if (a_skeleton->m_owner && a_skeleton->m_owner->baseForm)
 			{
 				auto bname = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESFullName);
 				if (bname)
-					name = bname->name;
+					name = bname->name.c_str();
 
 				auto bnpc = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESNPC);
 
@@ -47,7 +49,7 @@ namespace hdt
 			}
 
 			_MESSAGE("SkinSingleGeometry %s %d - %s, %s, (formid %08x base form %08x head template form %08x)",
-			         a_skeleton->m_name, a_skeleton->m_children.m_size, a_geometry->m_name, name,
+			         a_skeleton->m_name.c_str(), a_skeleton->m_children.m_size, a_geometry->m_name.c_str(), name,
 			         a_skeleton->m_owner ? a_skeleton->m_owner->formID : 0x0,
 			         a_skeleton->m_owner ? a_skeleton->m_owner->baseForm->formID : 0x0, formId);
 
@@ -70,6 +72,8 @@ namespace hdt
 			const char* name = "";
 			uint32_t formId = 0x0;
 
+			_DMESSAGE("Init Skin All Geometry...");// , m_skeleton = % 08x, m_owner = % 08x", a_skeleton, a_skeleton->m_owner);
+
 			if (a_skeleton->m_owner && a_skeleton->m_owner->baseForm)
 			{
 				auto bname = DYNAMIC_CAST(a_skeleton->m_owner->baseForm, TESForm, TESFullName);
@@ -83,7 +87,7 @@ namespace hdt
 			}
 
 			_MESSAGE("SkinAllGeometry %s %d, %s, (formid %08x base form %08x head template form %08x)",
-			         a_skeleton->m_name, a_skeleton->m_children.m_size, name,
+			         a_skeleton->m_name.c_str(), a_skeleton->m_children.m_size, name,
 			         a_skeleton->m_owner ? a_skeleton->m_owner->formID : 0x0,
 			         a_skeleton->m_owner ? a_skeleton->m_owner->baseForm->formID : 0x0, formId);
 
@@ -118,27 +122,27 @@ namespace hdt
 		//RelocAddr<uintptr_t> addr(offset::BSFaceGenNiNode_SkinSingleGeometry_bug);
 		//SafeWrite8(addr.GetUIntPtr(), 0x7);
 
-		struct BSFaceGenExtraModelData_BoneCount_Code : Xbyak::CodeGenerator
-		{
-			BSFaceGenExtraModelData_BoneCount_Code(void* buf) : CodeGenerator(4096, buf)
-			{
-				Xbyak::Label j_Out;
+		//struct BSFaceGenExtraModelData_BoneCount_Code : Xbyak::CodeGenerator
+		//{
+		//	BSFaceGenExtraModelData_BoneCount_Code(void* buf) : CodeGenerator(4096, buf)
+		//	{
+		//		Xbyak::Label j_Out;
 
-				lea(rsi, ptr[rbx + rcx * 8]);
-				cmp(rsi, 9); // if rsi < 9
-				jl(j_Out);   // jump to j_Out
-				mov(rsi, 8);
-				L(j_Out);
-				jmp(ptr[rip]);
-				dq(BoneLimit.GetUIntPtr() + 0x44);
-			}
-		};
+		//		//lea(rsi, ptr[rbx + rcx * 8]);
+		//		//cmp(rsi, 9); // if rsi < 9
+		//		//jl(j_Out);   // jump to j_Out
+		//		//mov(rsi, 8);
+		//		//L(j_Out);
+		//		//jmp(ptr[rip]);
+		//		//dq(BoneLimit.GetUIntPtr() + 0x44);
+		//	}
+		//};
 
-		void* codeBuf = g_localTrampoline.StartAlloc();
-		BSFaceGenExtraModelData_BoneCount_Code code(codeBuf);
-		g_localTrampoline.EndAlloc(code.getCurr());
+		//void* codeBuf = g_localTrampoline.StartAlloc();
+		//BSFaceGenExtraModelData_BoneCount_Code code(codeBuf);
+		//g_localTrampoline.EndAlloc(code.getCurr());
 
-		g_branchTrampoline.Write5Branch(BoneLimit.GetUIntPtr(), uintptr_t(code.getCode()));
+		//g_branchTrampoline.Write5Branch(BoneLimit.GetUIntPtr(), uintptr_t(code.getCode()));
 	}
 
 	void unhookFaceGen()
